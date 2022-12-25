@@ -1,0 +1,27 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  padding-top: 6vh;
+}
+
+.cover {
+  visibility: hidden;
+  position: fixed;
+  width: 100%;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 5;
+  opacity: 0;
+  background-color: black;
+  transition: all ease 0.4s;
+}
+
+.cover-active {
+  visibility: visible;
+  opacity: 0.8;
+}
