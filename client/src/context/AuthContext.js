@@ -1,5 +1,8 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { RouterProvider, useNavigate } from 'react-router-dom'
+
+import axios from '../api/axios'
+const VALIDATE_URL = '/validate'
 
 const AuthContext = createContext()
 
@@ -13,6 +16,26 @@ export function AuthProvider({ children }) {
 
   const navigate = useNavigate()
 
+  const checkAuth = async () => {
+    const token = localStorage.getItem('token')
+
+    if (!token) return
+
+    const response = await axios.get(VALIDATE_URL, {
+      headers: {
+        authorization: token,
+      },
+    })
+
+    if (response.data.user) {
+      authorize(response.data.user)
+    }
+  }
+
+  useEffect(() => {
+    checkAuth()
+  }, [])
+
   useEffect(() => {
     console.log(user)
   }, [user])
@@ -25,12 +48,9 @@ export function AuthProvider({ children }) {
   function deauthorize() {
     setIsAuth(false)
     setUser(null)
+    localStorage.setItem('token', '')
     navigate('/login')
   }
 
-  return (
-    <AuthContext.Provider value={{ isAuth, user, authorize, deauthorize }}>
-      {children}
-    </AuthContext.Provider>
-  )
+  return <AuthContext.Provider value={{ isAuth, user, authorize, deauthorize }}>{children}</AuthContext.Provider>
 }

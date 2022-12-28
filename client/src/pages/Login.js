@@ -24,6 +24,7 @@ function Login() {
     const response = await axios.post(LOGIN_URL, { username, password })
     if (response.data.user) {
       authorize(response.data.user)
+      localStorage.setItem('token', `Bearer ${response.data.accessToken}`)
     } else {
       setMessages(response.data.messages)
     }
