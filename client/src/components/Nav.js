@@ -1,7 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 
 function Nav({ isOpen, toggleNav }) {
+  const { isAuth, deauthorize } = useAuth()
+
   const closeNavByLink = () => {
     if (isOpen) {
       toggleNav()
@@ -25,6 +28,15 @@ function Nav({ isOpen, toggleNav }) {
           <Link onClick={closeNavByLink} to='/contact'>
             Contact
           </Link>
+        </li>
+        <li>
+          {!isAuth ? (
+            <Link onClick={closeNavByLink} to='/login'>
+              Log In
+            </Link>
+          ) : (
+            <button onClick={deauthorize}>Log Out</button>
+          )}
         </li>
       </ul>
 

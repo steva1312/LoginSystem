@@ -23,6 +23,8 @@ nav ul {
 nav ul li  {
   margin-left: 50px;
   list-style: none;
+  display: flex;
+  align-items: center;
 }
 
 nav ul li a {
@@ -31,6 +33,17 @@ nav ul li a {
   color: white;
   text-decoration: none;
   font-size: 19px;
+}
+
+nav ul li button {
+  color: white;
+  text-decoration: none;
+  font-size: 19px;
+  font-family: serif;
+  background: none;
+  border: solid 2px white;
+  padding: 3px;
+  cursor: pointer;
 }
 
 nav ul li a::after {
