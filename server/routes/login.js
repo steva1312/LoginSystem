@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken')
+
 const db = require('../config/database')
 
 const login = (req, res) => {
@@ -20,7 +22,9 @@ const login = (req, res) => {
       }
     }
 
-    res.send({ messages, user })
+    const accessToken = messages.length === 0 ? jwt.sign({ id: user.id }, 'degdeg1312', { expiresIn: '2m' }) : null
+
+    res.send({ messages, user, accessToken })
   })
 }
 
