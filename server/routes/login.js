@@ -1,7 +1,5 @@
 const jwt = require('jsonwebtoken')
 
-const db = require('../config/database')
-
 const login = (req, res) => {
   const { username, password } = req.body
 

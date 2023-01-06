@@ -5,7 +5,7 @@ const verify = (req, res, next) => {
 
   jwt.verify(token, 'degdeg1312', (err, payload) => {
     if (err) {
-      return res.status(403).json('Not authenticated')
+      return res.json('Not authenticated')
     }
 
     res.locals.id = payload.id
