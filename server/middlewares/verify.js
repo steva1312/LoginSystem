@@ -1,17 +1,15 @@
 const jwt = require('jsonwebtoken')
 
 const verify = (req, res, next) => {
-  const token = req.headers.authorization.split(' ')[1]
+  try {
+    const token = req.headers.authorization.split(' ')[1]
+    const { id } = jwt.verify(token, 'degdeg1312')
+    req.id = id
+  } catch (err) {
+    return res.send('Token expired or is invalid')
+  }
 
-  jwt.verify(token, 'degdeg1312', (err, payload) => {
-    if (err) {
-      return res.json('Not authenticated')
-    }
-
-    req.id = payload.id
-
-    next()
-  })
+  next()
 }
 
 module.exports = verify
