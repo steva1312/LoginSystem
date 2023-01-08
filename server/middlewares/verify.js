@@ -8,7 +8,7 @@ const verify = (req, res, next) => {
       return res.json('Not authenticated')
     }
 
-    res.locals.id = payload.id
+    req.id = payload.id
 
     next()
   })

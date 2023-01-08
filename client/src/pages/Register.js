@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import useTitle from '../hooks/useTitle'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 
 import axios from '../api/axios'
 import { useAuth } from '../context/AuthContext'
@@ -21,7 +21,7 @@ function translateMessages(messages) {
         m.push('This email is already in use.')
         break
       default:
-        m.push('Something went wrong...')
+        m.push('Something went wrong.')
     }
   })
 
@@ -38,23 +38,22 @@ function Register() {
   const [password, setPassword] = useState('')
   const [messages, setMessages] = useState([])
 
-  const { isAuth } = useAuth()
-
-  const navigate = useNavigate()
+  const { user } = useAuth()
 
   const handleSubmit = async e => {
     e.preventDefault()
 
     const response = await axios.post(REGISTER_URL, { email, password })
     if (response.data.messages.length === 0) {
-      navigate('/login')
+      setMessages(['Confirmation mail is sent to your email adress. Please confirm it so we know the email is yours.'])
+    } else {
+      setMessages(translateMessages(response.data.messages))
     }
-    setMessages(translateMessages(response.data.messages))
   }
 
   return (
     <div>
-      {isAuth ? <Navigate to='/' /> : null}
+      {user ? <Navigate to='/' /> : null}
 
       <h1>Register</h1>
 

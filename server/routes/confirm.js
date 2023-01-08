@@ -11,7 +11,7 @@ const confirm = async (req, res) => {
     return res.send('invalid token')
   }
 
-  res.send('Email confirmed!')
+  res.redirect('http://localhost:3000/login?confirmed=true')
 }
 
 module.exports = confirm

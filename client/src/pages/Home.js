@@ -5,9 +5,9 @@ import useTitle from '../hooks/useTitle'
 function Home() {
   useTitle('Home')
 
-  const { isAuth, user } = useAuth()
+  const { user } = useAuth()
 
-  return <h1>{isAuth ? `Hello ${user.username}!` : 'Home'}</h1>
+  return <h1>{user ? `Hello ${user.email}!` : 'Home'}</h1>
 }
 
 export default Home

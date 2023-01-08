@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
 function Nav({ isOpen, toggleNav }) {
-  const { isAuth, deauthorize } = useAuth()
+  const { user, deauthorize } = useAuth()
 
   const closeNavByLink = () => {
     if (isOpen) {
@@ -30,7 +30,7 @@ function Nav({ isOpen, toggleNav }) {
           </Link>
         </li>
         <li>
-          {!isAuth ? (
+          {!user ? (
             <Link onClick={closeNavByLink} to='/login'>
               Log In
             </Link>

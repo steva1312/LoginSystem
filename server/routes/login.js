@@ -1,29 +1,22 @@
 const jwt = require('jsonwebtoken')
+const { User } = require('../models')
 
-const login = (req, res) => {
-  const { username, password } = req.body
+const login = async (req, res) => {
+  const { email, password } = req.body
 
   const messages = []
 
-  //check if user exists
-  db.query('select * from user where username = ?', [username], (err, result) => {
-    let user = null
+  const user = await User.findOne({ where: { email } })
 
-    if (result.length === 0) {
-      messages.push('user not found')
-    } else {
-      //check password
-      if (result[0].password === password) {
-        user = result[0]
-      } else {
-        messages.push('wrong password')
-      }
-    }
+  if (!user) messages.push('USER_NOT_FOUND')
+  else {
+    if (user.password !== password) messages.push('WRONG_PASSWORD')
+    if (!user.confirmed) messages.push('NOT_CONFIRMED')
+  }
 
-    const accessToken = messages.length === 0 ? jwt.sign({ id: user.id }, 'degdeg1312', { expiresIn: '2m' }) : null
+  const accessToken = messages.length === 0 ? jwt.sign({ id: user.id }, 'degdeg1312', { expiresIn: '2m' }) : null
 
-    res.send({ messages, user, accessToken })
-  })
+  res.send({ messages, accessToken })
 }
 
 module.exports = login
