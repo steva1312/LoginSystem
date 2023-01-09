@@ -14,11 +14,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     password: {
       type: DataTypes.STRING,
-      validate: {
-        len: {
-          args: [6, 32],
-        },
-      },
     },
     confirmed: {
       type: DataTypes.BOOLEAN,

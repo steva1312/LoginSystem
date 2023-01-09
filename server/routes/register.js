@@ -1,6 +1,7 @@
 const { User } = require('../models/')
 const nodemailer = require('nodemailer')
 const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
 
 const transporter = nodemailer.createTransport({
   service: 'Gmail',
@@ -16,12 +17,18 @@ const register = async (req, res) => {
   const messages = []
   let user
 
+  if (password.length < 6 || password.length > 32) messages.push('INVALID_PASSWORD')
+
   try {
-    user = await User.create({
-      email,
-      password,
-    })
+    if (messages.length === 0) {
+      const hashedPassword = await bcrypt.hash(password, 12)
+      user = await User.create({
+        email,
+        password: hashedPassword,
+      })
+    }
   } catch (err) {
+    console.log(err)
     //using for instead of forEach so await can be used
     for (const error of err.errors) {
       if (error.path === 'email') {
@@ -32,8 +39,6 @@ const register = async (req, res) => {
           if (!user.confirmed) await user.update({ password })
           else messages.push('EMAIL_REGISTERED')
         }
-      } else if (error.path === 'password') {
-        if (error.type === 'Validation error') messages.push('INVALID_PASSWORD')
       } else messages.push('ERROR')
     }
   }

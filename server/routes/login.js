@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const { User } = require('../models')
+const bcrypt = require('bcrypt')
 
 const login = async (req, res) => {
   const { email, password } = req.body
@@ -10,7 +11,8 @@ const login = async (req, res) => {
 
   if (!user) messages.push('USER_NOT_FOUND')
   else {
-    if (user.password !== password) messages.push('WRONG_PASSWORD')
+    const valid = await bcrypt.compare(password, user.password)
+    if (!valid) messages.push('WRONG_PASSWORD')
     if (!user.confirmed) messages.push('NOT_CONFIRMED')
   }
 

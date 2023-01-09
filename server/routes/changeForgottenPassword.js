@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const { User } = require('../models')
+const bcrypt = require('bcrypt')
 
 const changeForgottenPassword = async (req, res) => {
   const { token, password } = req.body
@@ -18,7 +19,8 @@ const changeForgottenPassword = async (req, res) => {
   }
 
   if (messages.length === 0) {
-    await User.update({ password }, { where: { id } })
+    const hashedPassword = await bcrypt.hash(password, 12)
+    await User.update({ password: hashedPassword }, { where: { id } })
   }
 
   res.send({ messages })
