@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
 const { User } = require('../models')
 const bcrypt = require('bcrypt')
+const config = require('../config')
 
 const changeForgottenPassword = async (req, res) => {
   const { token, password } = req.body
@@ -12,7 +13,7 @@ const changeForgottenPassword = async (req, res) => {
   let id
 
   try {
-    const decode = jwt.verify(token, 'FORGOT_SECRET')
+    const decode = jwt.verify(token, config.forgotSecret)
     id = decode.id
   } catch (err) {
     messages.push('INVALID_TOKEN')

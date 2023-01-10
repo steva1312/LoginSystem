@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
 const { User } = require('../models')
 const bcrypt = require('bcrypt')
+const config = require('../config')
 
 const login = async (req, res) => {
   const { email, password } = req.body
@@ -16,7 +17,7 @@ const login = async (req, res) => {
     if (!user.confirmed) messages.push('NOT_CONFIRMED')
   }
 
-  const accessToken = messages.length === 0 ? jwt.sign({ id: user.id }, 'degdeg1312', { expiresIn: '2m' }) : null
+  const accessToken = messages.length === 0 ? jwt.sign({ id: user.id }, config.accessSecret, { expiresIn: '2m' }) : null
 
   res.send({ messages, accessToken })
 }

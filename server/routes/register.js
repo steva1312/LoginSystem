@@ -2,12 +2,13 @@ const { User } = require('../models/')
 const nodemailer = require('nodemailer')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
+const config = require('../config')
 
 const transporter = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
-    user: 'stevan.randjelovic.apps@gmail.com',
-    pass: 'ywhiolfipwjucpoj',
+    user: config.email,
+    pass: config.emailPassword,
   },
 })
 
@@ -44,7 +45,7 @@ const register = async (req, res) => {
   }
 
   if (messages.length === 0) {
-    jwt.sign({ id: user.id }, 'EMAIL_SECRET', { expiresIn: '1d' }, (err, emailToken) => {
+    jwt.sign({ id: user.id }, config.emailSecret, { expiresIn: '1d' }, (err, emailToken) => {
       const url = `http://localhost:5000/confirm/${emailToken}`
 
       transporter.sendMail({
